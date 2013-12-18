@@ -32,8 +32,9 @@ defmodule Rethinkdb.Mixfile do
 
   def deps(:test) do
     deps(:prod) ++ [
-      {:meck, github: "eproxus/meck", tag: "0.8.1", override: true},
-      {:mock, github: "jjh42/mock"}
+    #{:meck, github: "eproxus/meck", tag: "0.8.1", override: true},
+      {:meck, [branch: "develop" ,github: "eproxus/meck"]},
+      {:mock, github: "antp/mock"}
     ]
   end
 
