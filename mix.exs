@@ -26,7 +26,7 @@ defmodule Rethinkdb.Mixfile do
   # Returns the list of dependencies in the format:
   def deps(:prod) do
     [
-      { :protobuf, github: "antp/elixir-protobuf", tag: "v0.0.3" },
+      { :protobuf, github: "antp/elixir-protobuf" },
     ]
   end
 
