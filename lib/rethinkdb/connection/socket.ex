@@ -1,4 +1,5 @@
 defmodule Rethinkdb.Connection.Socket do
+  import Kernel, except: [send: 2]
   alias Rethinkdb.Connection.Options
 
   defrecordp :record, __MODULE__, socket: nil

@@ -4,7 +4,7 @@ defmodule Rethinkdb.Mixfile do
   def project do
     [ app: :'rethinkdb',
       version: "0.2.2",
-      elixir: "~> 0.11.0",
+      elixir: "~> 0.12.0",
       deps: deps(Mix.env) ]
   end
 

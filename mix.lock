@@ -1,5 +1,4 @@
-[ "ex_doc": {:git, "git://github.com/elixir-lang/ex_doc.git", "c13d10aaed19ef05c2c8362b9b555926e9770902", []},
-  "gpb": {:git, "git://github.com/tomas-abrahamsson/gpb.git", "e07d6dae832120ce26276fac30eb79b6d94b0054", []},
-  "meck": {:git, "git://github.com/eproxus/meck.git", "1286aba1cb6bbd6c9fc3f817740758b224843ee7", [{:tag, "0.8.1"}]},
-  "mock": {:git, "git://github.com/jjh42/mock.git", "e54a8f8ac3b69b5a610399f7fb5efe65446526eb", []},
-  "protobuf": {:git, "git://github.com/azukiapp/elixir-protobuf.git", "88171f9cacfb5e5e94b48151784bf68b9d2023f9", [{:tag, "v0.0.3"}]} ]
+[ "gpb": {:git, "git://github.com/tomas-abrahamsson/gpb.git", "81afcb733a67660a644ca5ecf5fa14f617f8a8d4", [tag: "3.7.1"]},
+  "meck": {:git, "git://github.com/eproxus/meck.git", "62265e4a89297b3415502351a35082933225d1af", [branch: "develop"]},
+  "mock": {:git, "git://github.com/antp/mock.git", "c59361fceede463e5584412809ade6b4793c6a88", []},
+  "protobuf": {:git, "git://github.com/antp/elixir-protobuf.git", "ebae5b9a6abdaac7bb04a3e2a137f58f84365d1c", []} ]

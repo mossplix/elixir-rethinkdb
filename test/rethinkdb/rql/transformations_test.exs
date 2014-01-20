@@ -85,21 +85,21 @@ defmodule Rethinkdb.Rql.Transformations.Test do
 
   test "order documents by fields", var do
     result = var[:table].order_by([:combatPower, :compassionPower]).run!
-    assert "Captain Marvel" == Enum.first(result)[:superhero]
+    assert "Captain Marvel" == List.first(result)[:superhero]
     assert "Hulk" == List.last(result)[:superhero]
   end
 
   test "order documents by index", var do
     var[:table].index_create(:compassionPower).run
     result = var[:table].order_by(:combatPower, index: :compassionPower).run!
-    assert "Hulk" == Enum.first(result)[:superhero]
+    assert "Hulk" == List.first(result)[:superhero]
     assert "Spiderman" == List.last(result)[:superhero]
   end
 
   test "order desc only by index", var do
     var[:table].index_create(:combatPower).run
     result = var[:table].order_by(index: r.desc(:combatPower)).run!
-    assert "Hulk" == Enum.first(result)[:superhero]
+    assert "Hulk" == List.first(result)[:superhero]
   end
 
   test "order desc and asc", var do
@@ -107,7 +107,7 @@ defmodule Rethinkdb.Rql.Transformations.Test do
       [r.desc(:combatPower), r.asc(:compassionPower)
     ]).run!
 
-    assert "Hulk" == Enum.first(result)[:superhero]
+    assert "Hulk" == List.first(result)[:superhero]
     assert "Spiderman" == List.last(result)[:superhero]
   end
 
@@ -117,15 +117,15 @@ defmodule Rethinkdb.Rql.Transformations.Test do
     end
 
     result = var[:table].order_by(func).run!
-    assert "Spiderman" == Enum.first(result)[:superhero]
+    assert "Spiderman" == List.first(result)[:superhero]
     assert "Hulk" == List.last(result)[:superhero]
 
     result = var[:table].order_by(r.desc(func)).run!
-    assert "Hulk" == Enum.first(result)[:superhero]
+    assert "Hulk" == List.first(result)[:superhero]
     assert "Spiderman" == List.last(result)[:superhero]
 
     result = var[:table].order_by(r.asc(func)).run!
-    assert "Spiderman" == Enum.first(result)[:superhero]
+    assert "Spiderman" == List.first(result)[:superhero]
     assert "Hulk" == List.last(result)[:superhero]
   end
 
