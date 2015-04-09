@@ -13,8 +13,8 @@ defmodule Rethinkdb.Rql.Test do
   test "defines a run to forward Connection.run" do
     mocks = [
       connect!: fn _ -> {Connection} end,
-      run: fn QL2.Term[] = term, {Connection} -> {:ok, term} end,
-      run!: fn QL2.Term[] = term, {Connection} -> term end
+      run: fn term, {Connection} -> {:ok, term} end,
+      run!: fn term, {Connection} -> term end
     ]
     with_mock Connection, mocks do
       conn = r.connect
@@ -44,7 +44,7 @@ defmodule Rethinkdb.Rql.Test do
 
   test "return a connection record" do
     conn = r.connect(default_options)
-    assert is_record(conn, Rethinkdb.Connection)
+    assert is_map(conn, Rethinkdb.Connection)
     assert conn.open?
     conn.close
   end

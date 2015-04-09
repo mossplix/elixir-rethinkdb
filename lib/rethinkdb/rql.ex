@@ -1,9 +1,10 @@
 defmodule Rethinkdb.Rql do
   alias Rethinkdb.Connection
   alias Rethinkdb.Connection.Options
+  require Record
 
   # Geral record
-  defrecordp :rql, __MODULE__, terms: []
+  Record.defrecordp :rql, __MODULE__, terms: []
 
   @type t      :: __MODULE__
   @type conn   :: Rethinkdb.Connection
@@ -59,7 +60,7 @@ defmodule Rethinkdb.Rql do
   @spec connect(params | url) :: conn
   def connect, do: connect([])
 
-  def connect(opts) when is_record(opts, Options) do
+  def connect(opts) when Record.is_record(opts, Options) do
     Connection.connect!(opts)
   end
 

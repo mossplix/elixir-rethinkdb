@@ -12,7 +12,7 @@ defmodule Rethinkdb.Connection.Supervisor do
     supervise [], strategy: :one_for_one
   end
 
-  def start_worker(Options[] = options) do
+  def start_worker(options) do
     ref    = make_ref()
     worker = worker(Connection, [options], id: ref, restart: :temporary)
     :supervisor.start_child(

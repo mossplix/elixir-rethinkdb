@@ -19,7 +19,7 @@ defmodule Rethinkdb.Rql.ManipulatingDocument do
         new_term(:'MERGE', [expr(object)], [], query)
       end
 
-      def literal(object // nil) do
+      def literal(object \\ nil) do
         new_term(:'LITERAL', object && [object] || [])
       end
 
@@ -59,7 +59,7 @@ defmodule Rethinkdb.Rql.ManipulatingDocument do
         new_term(:'SPLICE_AT', [index, array], query)
       end
 
-      def delete_at(index, endindex // nil, rql() = query) do
+      def delete_at(index, endindex \\ nil, rql() = query) do
         new_term(:'DELETE_AT', [index | endindex && [endindex] || []], query)
       end
 

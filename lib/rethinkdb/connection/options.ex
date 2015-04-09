@@ -1,11 +1,12 @@
 defmodule Rethinkdb.Connection.Options do
+  require Record
   # Fields and default values for connection record
-  @fields [ id: nil, host: "localhost", port: 28015, auth_key: "",
+  defstruct [ id: nil, host: "localhost", port: 28015, auth_key: "",
             timeout: 20, db: nil]
 
   # Record def
-  Record.deffunctions(@fields, __ENV__)
-  Record.import __MODULE__, as: :ropts
+  Record.Deprecated.deffunctions @fields, __ENV__
+
 
   @type t   :: __MODULE__
   @type uri :: String.t
@@ -33,7 +34,7 @@ defmodule Rethinkdb.Connection.Options do
       "rethinkdb://#{@fields[:host]}:#{@fields[:port]}/test
   """
   @spec to_uri(t) :: String.t
-  def to_uri(ropts(db: db, port: port, host: host, auth_key: auth_key)) do
+  def to_uri(%__MODULE__{db: db, port: port, host: host, auth_key: auth_key}) do
     if auth_key != nil do
       auth_key = "#{auth_key}@"
     end
@@ -45,12 +46,12 @@ defmodule Rethinkdb.Connection.Options do
     scheme: "rethinkdb", host: host, port: port, userinfo: auth_key, path: db
   ]) do
     db = List.last(String.split(db || "", "/"))
-    ropts([
+    %__MODULE__{
       host: host,
       port: port || @fields[:port],
       auth_key: auth_key || @fields[:auth_key],
       db: db != "" && db || @fields[:db]
-    ])
+    }
   end
 
   defp extract_from_uri(_) do

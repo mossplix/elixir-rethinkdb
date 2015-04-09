@@ -3,7 +3,7 @@ defmodule Rethinkdb.Rql.WriteData do
 
   defmacro __using__(_opts) do
     quote do
-      def insert(data, opts // [], rql() = query) do
+      def insert(data, opts \\ [], rql() = query) do
         new_term(:'INSERT', [data], opts, query)
       end
 
@@ -31,7 +31,7 @@ defmodule Rethinkdb.Rql.WriteData do
         new_term(:'REPLACE', [data], opts, query)
       end
 
-      def delete(opts // [], rql() = query) do
+      def delete(opts \\ [], rql() = query) do
         new_term(:'DELETE', [], opts, query)
       end
     end

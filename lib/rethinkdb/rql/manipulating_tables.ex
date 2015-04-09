@@ -8,15 +8,15 @@ defmodule Rethinkdb.Rql.ManipulatingTables do
         table_create(name, [], query)
       end
 
-      def table_create(name, opts // [], rql() = query // rql()) do
+      def table_create(name, opts \\ [], rql() = query \\ rql()) do
         new_term(:'TABLE_CREATE', [name], opts, query)
       end
 
-      def table_drop(name, rql() = query // rql()) do
+      def table_drop(name, rql() = query \\ rql()) do
         new_term(:'TABLE_DROP', [name], [], query)
       end
 
-      def table_list(rql() = query // rql()) do
+      def table_list(rql() = query \\ rql()) do
         new_term(:'TABLE_LIST', [], query)
       end
 

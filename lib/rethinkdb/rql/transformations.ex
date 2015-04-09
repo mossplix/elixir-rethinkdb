@@ -11,7 +11,7 @@ defmodule Rethinkdb.Rql.Transformations do
         map(fn _ -> predicate end, query)
       end
 
-      def with_fields(fields, options // [], rql() = query) do
+      def with_fields(fields, options \\ [], rql() = query) do
         new_term(:'WITH_FIELDS', [fields, options], query)
       end
 
@@ -23,7 +23,7 @@ defmodule Rethinkdb.Rql.Transformations do
         order_by([], opts, query)
       end
 
-      def order_by(keys_or_function, opts // [], rql() = query) do
+      def order_by(keys_or_function, opts \\ [], rql() = query) do
         if is_function(keys_or_function) do
           keys_or_function = func(keys_or_function)
         end

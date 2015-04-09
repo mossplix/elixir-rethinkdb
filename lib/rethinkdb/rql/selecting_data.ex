@@ -9,7 +9,7 @@ defmodule Rethinkdb.Rql.SelectingData do
         new_term(:'DB', [name])
       end
 
-      def table(name, rql() = query // rql()) do
+      def table(name, rql() = query \\ rql()) do
         new_term(:'TABLE', [name], query)
       end
 

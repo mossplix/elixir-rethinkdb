@@ -34,7 +34,7 @@ defmodule Rethinkdb.Case do
   end
 
   # TODO: Fix meck bug in expectation with raise error
-  defmacro mock_with_raise(mock_module, opts // [], mocks, test) do
+  defmacro mock_with_raise(mock_module, opts \\ [], mocks, test) do
     quote do
       :meck.new(unquote(mock_module), unquote(opts))
       Mock._install_mock(unquote(mock_module), unquote(mocks))
@@ -62,7 +62,7 @@ defmodule Rethinkdb.Case do
   end
 
   def table_to_test(tables, opts) when is_list(tables) do
-    lc table inlist tables do
+    for table <- tables do
       table_to_test(table, opts)
     end
   end

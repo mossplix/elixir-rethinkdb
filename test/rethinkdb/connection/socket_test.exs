@@ -8,7 +8,7 @@ defmodule Rethinkdb.Connection.Socket.Test do
 
   test "open a socket with a opts" do
     socket = Socket.connect!(options)
-    assert is_record(socket, Socket)
+    assert is_map(socket, Socket)
     assert socket.open?
   end
 
@@ -23,8 +23,8 @@ defmodule Rethinkdb.Connection.Socket.Test do
       socket = Socket.connect!(options)
       socket_opts = [:binary | [packet: :raw, active: false]]
 
-      assert is_record(socket, Socket)
-      host = String.to_char_list!(options.host)
+      assert is_map(socket, Socket)
+      host = List.from_char_data!(options.host)
       assert called :gen_tcp.connect(host, options.port, socket_opts)
       refute socket.close.open?
     end
@@ -145,7 +145,7 @@ defmodule Rethinkdb.Connection.Socket.Test do
     end
   end
 
-  def mock_socket(mocks // []) do
+  def mock_socket(mocks \\ []) do
     Dict.merge([
       connect: fn _, _, _ -> {:ok, :socket} end,
       recv: fn :socket, length, timeout ->

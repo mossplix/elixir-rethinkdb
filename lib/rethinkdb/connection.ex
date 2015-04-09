@@ -12,9 +12,10 @@ defmodule Rethinkdb.Connection do
   alias QL2.Term
   alias QL2.Query
   alias QL2.Response
+  require Record
 
-  defrecordp :conn, __MODULE__, pid: nil
-  defrecord State, options: nil, socket: nil, next_token: 1
+  Record.defrecordp :conn, __MODULE__, pid: nil
+  Record.defrecord State, options: nil, socket: nil, next_token: 1
 
   @type t :: __MODULE__
   @type response :: success | error
@@ -26,7 +27,7 @@ defmodule Rethinkdb.Connection do
 
   # Public API
   @spec connect(Options.t) :: {:ok, t} | {:error, any}
-  def connect(Options[] = options) do
+  def connect(options) do
     case Supervisor.start_worker(options) do
       {:ok, pid} when is_pid(pid) ->
         {:ok, conn(pid: pid)}
@@ -36,7 +37,7 @@ defmodule Rethinkdb.Connection do
   end
 
   @spec connect!(Options.t) :: t | no_return
-  def connect!(Options[] = options) do
+  def connect!(options) do
     case connect(options) do
       {:ok, conn} -> conn
       {:error, error} ->
@@ -96,18 +97,18 @@ defmodule Rethinkdb.Connection do
   end
 
   @spec run(Term.t, t) :: response
-  def run(Term[] = query, conn(pid: pid)) do
+  def run(query, conn(pid: pid)) do
     :gen_server.call(pid, {:run, query})
   end
 
   @spec run(Term.t) :: response
-  def run(Term[] = query) do
+  def run(query) do
     run(query, conn(pid: @default_key))
   end
 
   # TODO: Add test for error on the socket
   @spec run!(Term.t, t) :: any | [any] | no_return
-  def run!(Term[] = query, conn() = conn) do
+  def run!(query, conn() = conn) do
     case run(query, conn) do
       {:ok, response} -> response
       {:error, msg} when is_bitstring(msg) ->
@@ -118,19 +119,19 @@ defmodule Rethinkdb.Connection do
   end
 
   @spec run!(Term.t) :: any | [any] | no_return
-  def run!(Term[] = query) do
+  def run!(query) do
     run!(query, conn(pid: @default_key))
   end
 
   # Supervisor API
   @spec start_link(Options.t) :: {:ok, pid}
-  def start_link(Options[] = options) do
+  def start_link(options) do
     :gen_server.start_link(__MODULE__, options, [])
   end
 
   # GenServer API
   @spec init(Options.t) :: {:ok, State.t} | { :stop, String.t }
-  def init(Options[] = options) do
+  def init(options) do
     Process.flag(:trap_exit, true)
     socket = Socket.connect!(options).process!(self)
     Authentication.auth!(socket, options)
@@ -156,7 +157,7 @@ defmodule Rethinkdb.Connection do
     { :reply, db, state}
   end
 
-  def handle_call({:run, Term[] = term}, _from,
+  def handle_call({:run, term}, _from,
     State[next_token: token, socket: socket,
       options: Options[db: db, timeout: timeout]
     ] = state) do

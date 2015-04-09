@@ -13,7 +13,7 @@ defmodule Rethinkdb.Connection.Test do
 
   def options, do: default_options
 
-  def mock_socket(mocks // []) do
+  def mock_socket(mocks \\ []) do
     Dict.merge([
       connect!: fn _ -> {Socket} end,
       process!: fn _, {Socket} -> {Socket} end,
@@ -50,14 +50,14 @@ defmodule Rethinkdb.Connection.Test do
   test_with_mock "start connect with supervisor", Socket, mock_socket do
     with_mock Supervisor, [:passthrough], [] do
       {:ok, conn} = Connection.connect(options)
-      assert is_record(conn, Connection)
+      assert is_map(conn, Connection)
       assert called Supervisor.start_worker(options)
       conn.close
     end
 
     with_mock Supervisor, [:passthrough], [] do
       conn = Connection.connect!(options)
-      assert is_record(conn, Connection)
+      assert is_map(conn, Connection)
       assert called Supervisor.start_worker(options)
       conn.close
     end

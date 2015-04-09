@@ -1,28 +1,41 @@
 defmodule Rethinkdb.Connection.Socket do
   import Kernel, except: [send: 2]
   alias Rethinkdb.Connection.Options
+  require Record
 
-  defrecordp :record, __MODULE__, socket: nil
+  Record.defrecordp :record, __MODULE__, socket: nil
   @type t :: __MODULE__
 
-  defexception Error, code: nil, msg: nil do
-    @type t :: Error.t
 
-    def message(Error[code: code, msg: nil]) do
-      "(#{code}) #{unix_error(code)}"
-    end
+   defmodule Error do
+       @type t :: Error.t
 
-    def message(Error[msg: msg]) do
-      to_string(msg)
-    end
+        defexception  message: nil
 
-    defp unix_error(:timeout), do: "timeout recv"
-    defp unix_error(code), do: :inet.format_error(code)
-  end
+              def exception(msg: msg,code: code) do
+
+                   %__MODULE__{message: "(#{code}) #{unix_error(code)}"}
+
+              end
+
+        defp unix_error(:timeout), do: "timeout recv"
+        defp unix_error(code), do: :inet.format_error(code)
+
+
+
+
+
+      end
+
+
+
+
+
+
 
   # Open connect in passive mode
-  def connect!(Options[host: address, port: port]) do
-    address = String.to_char_list!(address)
+  def connect!(%{host: address, port: port}) do
+    address = String.to_char_list(address)
 
     opts = [:binary | [packet: :raw, active: false]]
     case :gen_tcp.connect(address, port, opts) do
@@ -40,7 +53,7 @@ defmodule Rethinkdb.Connection.Socket do
   end
 
   @spec active!(t) :: :t | no_return
-  def active!(mode // true, record(socket: socket) = record) do
+  def active!(mode \\ true, record(socket: socket) = record) do
     case :inet.setopts(socket, active: mode) do
       :ok -> record
       {:error, code} -> raise Error, code: code
@@ -61,7 +74,7 @@ defmodule Rethinkdb.Connection.Socket do
   end
 
   @spec recv!(number, t) :: binary
-  def recv!(length // 0, timeout // :infinity, record(socket: socket)) do
+  def recv!(length \\ 0, timeout \\ :infinity, record(socket: socket)) do
     case :gen_tcp.recv(socket, length, timeout) do
       {:ok, data} -> data
       other -> error_raise(other)
@@ -79,7 +92,7 @@ defmodule Rethinkdb.Connection.Socket do
     result = << acc :: binary, record.recv!(0, timeout) :: binary >>
     case String.slice(result, -1, 1) do
       << 0 >> ->
-        String.slice(result, 0, iolist_size(result) - 1)
+        String.slice(result, 0, :erlang.iolist_size(result) - 1)
       _ -> recv_until_null!(result, timeout, record)
     end
   end

@@ -9,7 +9,7 @@ defmodule Rethinkdb.Connection.Authentication do
   @spec auth!(Socket.t, Options.t) :: :ok | no_return
   def auth!(socket,
     Options[auth_key: auth_key, timeout: timeout] = options
-  ) when is_record(socket, Socket) do
+  ) when is_map(socket, Socket) do
 
     auth_key = [@version, <<iolist_size(auth_key) :: [size(32), little]>>, auth_key]
     :ok = socket.send!(auth_key)

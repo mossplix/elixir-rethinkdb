@@ -1,12 +1,13 @@
 defmodule Rethinkdb.Rql.TermsConstructor do
   @moduledoc false
+  require Record
 
   defmacro __using__(_opts) do
     quote do
-      defrecordp :term, type: nil, args: [], optargs: []
+      Record.defrecordp :term, type: nil, args: [], optargs: []
 
       # Helper to terms create
-      defp new_term(type, args // []) do
+      defp new_term(type, args \\ []) do
         new_term(type, args, [], rql())
       end
 
@@ -18,7 +19,7 @@ defmodule Rethinkdb.Rql.TermsConstructor do
         new_term(type, args, [], query)
       end
 
-      defp new_term(type, args, opts) when is_list(opts) or is_record(opts, HashDict) do
+      defp new_term(type, args, opts) when is_list(opts) or Record.is_record(opts, HashDict) do
         new_term(type, args, opts, rql())
       end
 
@@ -42,7 +43,7 @@ defmodule Rethinkdb.Rql.TermsConstructor do
       defp func(func) when is_function(func) do
         {_, arity} = :erlang.fun_info(func, :arity)
         arg_count  = :lists.seq(1, arity)
-        func_args  = lc n inlist arg_count, do: var(n)
+        func_args  = for n <- arg_count, do: var(n)
 
         args = case apply(func, func_args) do
           [{key, _}|_] = obj when key != __MODULE__ -> [make_obj(obj)]

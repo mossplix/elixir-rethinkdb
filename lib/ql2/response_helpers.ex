@@ -14,7 +14,7 @@ defmodule QL2.ResponseHelpers do
       end
 
       def value(record(type: :'SUCCESS_SEQUENCE', response: data)) do
-        response = lc datum inlist data, do: datum.value
+        response = for datum <- data, do: datum.value
         {:ok, response}
       end
 

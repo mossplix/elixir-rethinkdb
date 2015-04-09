@@ -29,15 +29,15 @@ defmodule Rethinkdb.Rql.Build do
       end
 
       defp format_args(args) do
-        lc arg inlist args, do: format_arg(arg)
+        for arg <- args, do: format_arg(arg)
       end
 
-      defp format_opts(args) when is_record(args, HashDict) do
+      defp format_opts(args) when Record.is_record(args, HashDict) do
         format_opts(args.to_list)
       end
 
       defp format_opts(optargs) do
-        lc {key, value} inlist optargs do
+        for {key, value} <- optargs do
           Term.AssocPair.new(key: "#{key}", val: format_arg(value))
         end
       end

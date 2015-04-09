@@ -22,7 +22,7 @@ defmodule Rethinkdb.Rql.ControlStructures do
         new_term(:'DEFAULT', [value], query)
       end
 
-      def expr(Range[] = range) do
+      def expr(range) do
         make_array(Enum.to_list(range))
       end
 
@@ -31,7 +31,7 @@ defmodule Rethinkdb.Rql.ControlStructures do
         expr(HashDict.new(value))
       end
 
-      def expr(value) when is_record(value, HashDict) do
+      def expr(value) when Record.is_record(value, HashDict) do
         make_obj(value)
       end
 
@@ -41,7 +41,7 @@ defmodule Rethinkdb.Rql.ControlStructures do
 
       def expr(value), do: new_term(:EXPR, [value])
 
-      def js(js_string, opts // []) do
+      def js(js_string, opts \\ []) do
         new_term(:'JAVASCRIPT', [js_string], opts)
       end
 
